@@ -129,39 +129,71 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
             </button>
           ) : null}
         </div>
-        <input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder={t("name")} />
-        <input value={draft.host} onChange={(event) => setDraft({ ...draft, host: event.target.value })} placeholder={t("host")} />
-        <div className="split-inputs">
-          <input
-            value={draft.port}
-            onChange={(event) => setDraft({ ...draft, port: Number(event.target.value) })}
-            type="number"
-            min={1}
-            max={65535}
-          />
-          <input value={draft.username} onChange={(event) => setDraft({ ...draft, username: event.target.value })} placeholder={t("username")} />
+        <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          {t("name")}
+          <input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder="例如：我的服务器" />
+        </label>
+        <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          IP 地址
+          <input value={draft.host} onChange={(event) => setDraft({ ...draft, host: event.target.value })} placeholder="例如：192.168.1.1" />
+        </label>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+            {t("port")}
+            <input
+              value={draft.port}
+              onChange={(event) => setDraft({ ...draft, port: Number(event.target.value) })}
+              type="number"
+              min={1}
+              max={65535}
+            />
+          </label>
+          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+            {t("username")}
+            <input value={draft.username} onChange={(event) => setDraft({ ...draft, username: event.target.value })} placeholder="例如：root" />
+          </label>
         </div>
-        <select
-          value={draft.credentialKind}
-          onChange={(event) => setDraft({ ...draft, credentialKind: event.target.value as ServerProfile["credentialKind"] })}
-        >
-          <option value="password">{t("password")}</option>
-          <option value="privateKey">{t("privateKey")}</option>
-        </select>
+        <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          {t("credentialKind")}
+          <select
+            value={draft.credentialKind}
+            onChange={(event) => setDraft({ ...draft, credentialKind: event.target.value as ServerProfile["credentialKind"] })}
+          >
+            <option value="password">{t("password")}</option>
+            <option value="privateKey">{t("privateKey")}</option>
+          </select>
+        </label>
         {draft.credentialKind === "password" ? (
-          <input
-            value={draft.password ?? ""}
-            onChange={(event) => setDraft({ ...draft, password: event.target.value })}
-            placeholder={t("sshPassword")}
-            type="password"
-          />
+          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+            {t("sshPassword")}
+            <input
+              value={draft.password ?? ""}
+              onChange={(event) => setDraft({ ...draft, password: event.target.value })}
+              placeholder="输入 SSH 密码"
+              type="password"
+            />
+          </label>
         ) : (
-          <textarea
-            value={draft.privateKey ?? ""}
-            onChange={(event) => setDraft({ ...draft, privateKey: event.target.value })}
-            placeholder={t("pastePrivateKey")}
-            rows={5}
-          />
+          <>
+          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+            {t("privateKey")}
+            <textarea
+              value={draft.privateKey ?? ""}
+              onChange={(event) => setDraft({ ...draft, privateKey: event.target.value })}
+              placeholder="粘贴私钥内容，以 -----BEGIN 开头"
+              rows={5}
+            />
+          </label>
+          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+            私钥密码
+            <input
+              value={draft.passphrase ?? ""}
+              onChange={(event) => setDraft({ ...draft, passphrase: event.target.value })}
+              placeholder="如无私钥密码可留空"
+              type="password"
+            />
+          </label>
+          </>
         )}
         <button className="secondary-button" type="submit">
           <KeyRound size={16} />
