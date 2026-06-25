@@ -1,8 +1,9 @@
 :root {
   color-scheme: dark;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #050505;
-  color: #f3f3f3;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  background: #1c1c1e;
+  color: #f5f5f7;
 }
 
 * {
@@ -13,6 +14,26 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #48484a;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #636366;
 }
 
 button,
@@ -24,22 +45,23 @@ select {
 
 button {
   cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
 .login-shell {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: #090909;
+  background: #1c1c1e;
 }
 
 .login-panel {
   width: min(420px, calc(100vw - 32px));
-  border: 1px solid #2b2b2b;
-  border-radius: 8px;
-  background: #101010;
-  padding: 18px;
-  box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
+  border: 0;
+  border-radius: 14px;
+  background: #2c2c2e;
+  padding: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
 .login-panel-top {
@@ -53,17 +75,17 @@ button {
   height: 32px;
   display: inline-grid;
   place-items: center;
-  border: 1px solid #333;
-  border-radius: 6px;
-  background: #1a1a1a;
+  border: 1px solid #48484a;
+  border-radius: 8px;
+  background: #3a3a3c;
   color: #bbb;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
 
 .theme-toggle:hover {
-  border-color: #78dce8;
-  color: #78dce8;
+  border-color: #007aff;
+  color: #007aff;
 }
 
 .traffic-lights {
@@ -94,7 +116,7 @@ button {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 28px 0;
+  margin: 24px 0;
 }
 
 .login-brand h1 {
@@ -121,12 +143,13 @@ input,
 textarea,
 select {
   width: 100%;
-  border: 1px solid #333;
-  border-radius: 6px;
-  background: #070707;
-  color: #f6f6f6;
-  padding: 10px 12px;
+  border: 1px solid #48484a;
+  border-radius: 8px;
+  background: #1c1c1e;
+  color: #f5f5f7;
+  padding: 9px 12px;
   outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 textarea {
@@ -136,7 +159,8 @@ textarea {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #78dce8;
+  border-color: #007aff;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
 }
 
 .primary-button,
@@ -147,15 +171,16 @@ select:focus {
   justify-content: center;
   gap: 8px;
   border: 0;
-  border-radius: 6px;
-  color: #050505;
-  background: #f5f5f5;
-  padding: 11px 14px;
-  font-weight: 700;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 14px;
+  color: #ffffff;
+  background: #007aff;
 }
 
-.secondary-button {
-  background: #78dce8;
+.primary-button:hover,
+.secondary-button:hover {
+  opacity: 0.85;
 }
 
 .form-error,
@@ -165,8 +190,8 @@ select:focus {
 
 .app-shell {
   min-height: 100vh;
-  background: #050505;
-  color: #f3f3f3;
+  background: #1c1c1e;
+  color: #f5f5f7;
 }
 
 .app-shell.light {
@@ -176,13 +201,13 @@ select:focus {
 }
 
 .app-header {
-  height: 58px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
-  border-bottom: 1px solid #242424;
-  background: #0c0c0c;
+  padding: 0 16px;
+  border-bottom: 1px solid #38383a;
+  background: #2c2c2e;
 }
 
 .app-header > div:first-child {
@@ -193,31 +218,33 @@ select:focus {
 
 .workspace {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr) 320px;
-  gap: 14px;
-  padding: 14px;
-  min-height: calc(100vh - 58px);
+  grid-template-columns: 250px minmax(0, 1fr) 280px;
+  gap: 10px;
+  padding: 10px;
+  min-height: calc(100vh - 50px);
 }
 
 .side-panel,
 .monitor-panel,
 .terminal-wrap,
 .file-editor {
-  border: 1px solid #252525;
-  border-radius: 8px;
-  background: #0c0c0c;
+  border: 0;
+  border-radius: 12px;
+  background: #2c2c2e;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .history-panel {
-  border: 1px solid #252525;
-  border-radius: 8px;
-  background: #0c0c0c;
+  border: 0;
+  border-radius: 12px;
+  background: #2c2c2e;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .side-panel,
 .monitor-panel {
-  padding: 14px;
+  padding: 10px;
   overflow-y: auto;
 }
 
@@ -234,12 +261,14 @@ select:focus {
 
 .panel-title {
   gap: 8px;
-  font-weight: 700;
-  margin-bottom: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #8e8e93;
 }
 
 .panel-title.compact {
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .connection-list {
@@ -253,15 +282,20 @@ select:focus {
   align-items: center;
   gap: 8px;
   width: 100%;
-  border: 1px solid #292929;
-  border-radius: 6px;
-  background: #121212;
+  border: 0;
+  border-radius: 8px;
+  background: #3a3a3c;
   color: inherit;
-  padding: 8px;
+  padding: 8px 10px;
 }
 
 .connection-item.active {
-  border-color: #78dce8;
+  background: #3a3a3c;
+  box-shadow: inset 0 0 0 1px #007aff;
+}
+
+.connection-item:hover {
+  background: #48484a;
 }
 
 .connection-main {
@@ -297,10 +331,15 @@ select:focus {
   height: 28px;
   display: inline-grid;
   place-items: center;
-  border: 1px solid #303030;
+  border: 0;
   border-radius: 6px;
-  background: #171717;
+  background: transparent;
   color: #a6a6a6;
+}
+
+.connection-actions button:hover,
+.inline-icon-button:hover {
+  background: #48484a;
 }
 
 .inline-icon-button {
@@ -308,7 +347,7 @@ select:focus {
 }
 
 .connection-form {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .split-inputs {
@@ -319,28 +358,35 @@ select:focus {
 
 .center-stack {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) minmax(200px, 320px) minmax(140px, 240px);
-  gap: 14px;
+  grid-template-rows: auto minmax(0, 1fr) minmax(140px, 260px) minmax(90px, 180px);
+  gap: 10px;
   min-width: 0;
   min-height: 0;
 }
 
 .context-line {
   justify-content: space-between;
-  min-height: 30px;
+  min-height: 32px;
+  padding: 0 12px;
+  background: #3a3a3c;
+  border-radius: 8px 8px 0 0;
+  font-size: 12px;
+  color: #8e8e93;
 }
 
 .terminal-wrap {
   display: grid;
-  grid-template-rows: 38px minmax(0, 1fr);
+  grid-template-rows: 30px minmax(0, 1fr);
   min-height: 0;
 }
 
 .terminal-toolbar {
-  height: 38px;
+  height: 30px;
   justify-content: space-between;
-  padding: 0 12px;
-  border-bottom: 1px solid #252525;
+  padding: 0 10px;
+  border-bottom: 1px solid #38383a;
+  background: #3a3a3c;
+  font-size: 11px;
 }
 
 .terminal-title {
@@ -351,19 +397,19 @@ select:focus {
 }
 
 .terminal-host {
-  padding: 10px;
+  padding: 8px;
   min-height: 0;
   overflow: auto;
 }
 
 .metric-row {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .metric-head {
   justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .metric-head span {
@@ -377,34 +423,34 @@ select:focus {
 }
 
 .meter {
-  height: 8px;
+  height: 6px;
   overflow: hidden;
   border-radius: 999px;
-  background: #202020;
+  background: #3a3a3c;
 }
 
 .meter span {
   display: block;
   height: 100%;
-  background: #78dce8;
+  background: #007aff;
 }
 
 .process-title {
-  margin-top: 26px;
+  margin-top: 18px;
 }
 
 .process-table {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .process-row {
   display: grid;
   grid-template-columns: 48px 44px 54px minmax(0, 1fr);
   gap: 8px;
-  padding: 8px;
-  border-radius: 6px;
-  background: #131313;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #3a3a3c;
   font-family: "SFMono-Regular", monospace;
   font-size: 12px;
 }
@@ -417,13 +463,13 @@ select:focus {
 
 .file-editor {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 220px minmax(0, 1fr);
   min-height: 0;
 }
 
 .file-browser {
-  padding: 12px;
-  border-right: 1px solid #252525;
+  padding: 8px;
+  border-right: 1px solid #38383a;
   min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -446,11 +492,15 @@ select:focus {
   align-items: center;
   gap: 8px;
   border: 0;
-  border-radius: 6px;
-  background: #141414;
+  border-radius: 8px;
+  background: transparent;
   color: inherit;
-  padding: 9px;
+  padding: 7px 8px;
   text-align: left;
+}
+
+.file-list button:hover {
+  background: #48484a;
 }
 
 .file-list span {
@@ -460,19 +510,22 @@ select:focus {
 }
 
 .file-list small {
-  color: #989898;
+  color: #8e8e93;
+  font-size: 11px;
 }
 
 .editor-pane {
   min-width: 0;
   display: grid;
-  grid-template-rows: 42px minmax(0, 1fr) 22px;
+  grid-template-rows: 34px minmax(0, 1fr) 20px;
 }
 
 .editor-toolbar {
   justify-content: space-between;
-  padding: 0 12px;
-  border-bottom: 1px solid #252525;
+  padding: 0 10px;
+  border-bottom: 1px solid #38383a;
+  background: #3a3a3c;
+  font-size: 12px;
 }
 
 .editor-toolbar span {
@@ -489,19 +542,24 @@ select:focus {
 
 .editor-toolbar button,
 .icon-toggle {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   display: inline-grid;
   place-items: center;
-  border: 1px solid #303030;
+  border: 0;
   border-radius: 6px;
-  background: #121212;
+  background: transparent;
   color: inherit;
 }
 
+.editor-toolbar button:hover,
+.icon-toggle:hover {
+  background: #48484a;
+}
+
 .icon-toggle.active {
-  border-color: #78dce8;
-  color: #78dce8;
+  border-color: #007aff;
+  color: #007aff;
 }
 
 .editor-pane textarea {
@@ -510,11 +568,17 @@ select:focus {
   min-height: 0;
   font-family: "SFMono-Regular", "Cascadia Code", monospace;
   line-height: 1.55;
+  background: #1c1c1e;
+}
+
+.editor-pane textarea:focus {
+  box-shadow: none;
 }
 
 .editor-status {
   padding: 3px 12px;
-  color: #a7a7a7;
+  color: #8e8e93;
+  font-size: 11px;
 }
 
 .settings-strip {
@@ -539,10 +603,10 @@ select:focus {
 }
 
 .history-panel {
-  padding: 12px;
+  padding: 10px;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 10px;
+  gap: 6px;
   min-height: 0;
 }
 
@@ -568,14 +632,18 @@ select:focus {
 }
 
 .history-actions button {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   display: inline-grid;
   place-items: center;
-  border: 1px solid #303030;
+  border: 0;
   border-radius: 6px;
-  background: #121212;
+  background: transparent;
   color: inherit;
+}
+
+.history-actions button:hover {
+  background: #48484a;
 }
 
 .history-list {
@@ -589,9 +657,9 @@ select:focus {
 .history-item {
   display: grid;
   gap: 5px;
-  border-radius: 6px;
-  background: #131313;
-  padding: 9px;
+  border-radius: 8px;
+  background: #3a3a3c;
+  padding: 8px 10px;
 }
 
 .history-item code {
@@ -623,15 +691,19 @@ select:focus {
 }
 
 .two-factor-button {
-  height: 32px;
+  height: 30px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  border: 1px solid #303030;
-  border-radius: 6px;
-  background: #121212;
+  border: 0;
+  border-radius: 8px;
+  background: #3a3a3c;
   color: inherit;
   padding: 0 10px;
+}
+
+.two-factor-button:hover {
+  background: #48484a;
 }
 
 .totp-overlay {
@@ -646,11 +718,11 @@ select:focus {
 
 .totp-dialog {
   width: min(420px, calc(100vw - 32px));
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  background: #0d0d0d;
-  padding: 18px;
-  box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
+  border: 0;
+  border-radius: 14px;
+  background: #2c2c2e;
+  padding: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
 .totp-dialog p {
@@ -683,63 +755,122 @@ select:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #303030;
-  border-radius: 6px;
-  background: #121212;
+  border: 1px solid #48484a;
+  border-radius: 8px;
+  background: #3a3a3c;
   color: inherit;
-  padding: 11px 14px;
-  font-weight: 700;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+.ghost-button:hover {
+  background: #48484a;
 }
 
 .dialog-actions .secondary-button {
   width: auto;
 }
 
-.light .app-header,
+.light .app-shell {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.light .app-header {
+  background: #e8e8ed;
+  border-color: #d1d1d6;
+}
+
 .light .side-panel,
 .light .monitor-panel,
 .light .terminal-wrap,
 .light .file-editor,
-.light .history-panel,
-.light .login-panel {
+.light .history-panel {
   background: #ffffff;
-  border-color: #dedede;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .light input,
 .light textarea,
-.light select,
-.light .connection-item,
-.light .file-list button,
-.light .process-row,
-.light .icon-toggle,
-.light .editor-toolbar button,
-.light .two-factor-button,
-.light .ghost-button,
-.light .connection-actions button,
-.light .inline-icon-button,
-.light .history-actions button {
-  background: #f7f7f7;
-  border-color: #dadada;
-  color: #111;
+.light select {
+  background: #f5f5f7;
+  border-color: #d1d1d6;
+  color: #1d1d1f;
+}
+
+.light input:focus,
+.light textarea:focus,
+.light select:focus {
+  border-color: #007aff;
+  box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
+}
+
+.light .connection-item {
+  background: #f5f5f7;
+}
+
+.light .connection-item.active {
+  background: #f5f5f7;
+  box-shadow: inset 0 0 0 1px #007aff;
+}
+
+.light .connection-item:hover {
+  background: #e8e8ed;
+}
+
+.light .file-list button:hover,
+.light .history-item,
+.light .process-row {
+  background: #f5f5f7;
+}
+
+.light .context-line,
+.light .terminal-toolbar,
+.light .editor-toolbar {
+  background: #e8e8ed;
+  border-color: #d1d1d6;
+}
+
+.light .file-browser {
+  border-color: #d1d1d6;
 }
 
 .light .totp-dialog {
-  background: #fff;
-  border-color: #dedede;
+  background: #ffffff;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+}
+
+.light .login-panel {
+  background: #ffffff;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+}
+
+.light .connection-actions button:hover,
+.light .inline-icon-button:hover,
+.light .editor-toolbar button:hover,
+.light .icon-toggle:hover,
+.light .history-actions button:hover,
+.light .two-factor-button:hover,
+.light .ghost-button:hover {
+  background: #d1d1d6;
+}
+
+.light .meter {
+  background: #e8e8ed;
 }
 
 /* Login page light theme */
 .login-light {
   color-scheme: light;
-  background: #f0f0f0;
-  color: #111;
+  background: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .login-light .login-panel {
   background: #ffffff;
-  border-color: #dedede;
-  box-shadow: 0 24px 80px rgb(0 0 0 / 12%);
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
 }
 
 .login-light .login-brand p {
@@ -759,32 +890,48 @@ select:focus {
 
 .login-light input:focus,
 .login-light select:focus {
-  border-color: #3b9dac;
+  border-color: #007aff;
+  box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
 }
 
 .login-light .primary-button {
-  background: #222;
+  background: #007aff;
   color: #fff;
 }
 
+.login-light .primary-button:hover {
+  background: #0a84ff;
+}
+
 .login-light .theme-toggle {
-  background: #f0f0f0;
-  border-color: #ccc;
+  background: #f5f5f7;
+  border-color: #d1d1d6;
   color: #555;
 }
 
 .login-light .theme-toggle:hover {
-  border-color: #3b9dac;
-  color: #3b9dac;
+  border-color: #007aff;
+  color: #007aff;
 }
 
 .login-light .form-error {
-  color: #d44;
+  color: #ff3b30;
+}
+
+.login-light .ghost-button {
+  background: #f5f5f7;
+  border-color: #d1d1d6;
+}
+
+.login-light .ghost-button:hover {
+  background: #e8e8ed;
 }
 
 @media (max-width: 1120px) {
   .workspace {
-    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px;
   }
 
   .monitor-panel {
@@ -795,24 +942,27 @@ select:focus {
 @media (max-width: 760px) {
   .app-header {
     height: auto;
-    min-height: 58px;
-    gap: 10px;
+    min-height: 50px;
+    gap: 6px;
     align-items: flex-start;
     flex-direction: column;
-    padding: 12px;
+    padding: 8px 12px;
   }
 
   .workspace,
   .file-editor {
     grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 6px;
   }
 
   .center-stack {
-    grid-template-rows: auto minmax(360px, 50vh) minmax(280px, 360px) minmax(200px, 280px);
+    grid-template-rows: auto minmax(300px, 50vh) minmax(200px, 300px) minmax(80px, 160px);
+    gap: 6px;
   }
 
   .file-browser {
     border-right: 0;
-    border-bottom: 1px solid #252525;
+    border-bottom: 1px solid #38383a;
   }
 }
