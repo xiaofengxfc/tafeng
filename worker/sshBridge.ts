@@ -31,6 +31,8 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   let shell: ClientChannel | null = null;
   let sftpSession: SFTPWrapper | null = null;
   let tcpStream: CloudflareSocketDuplex | null = null;
+  /** 连接阶段: connecting → authenticated → sftp-initializing → ready | error */
+  let sshPhase: "connecting" | "authenticated" | "sftp-initializing" | "ready" | "error" = "connecting";
   /**
    * Tracks the visible content of the current terminal line from shell output.
    * Includes prompt + command text (e.g. "root@host:~# systemctl status nginx").
@@ -63,12 +65,16 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
     send({ type: "output", data: `${copy.connecting}\r\n` });
 
     try {
+      sshPhase = "connecting";
+      send({ type: "sftp-status", ready: false, message: "SSH 连接中..." });
+
       const tcpSocket = connect({ hostname: profile.host, port: profile.port });
       tcpStream = new CloudflareSocketDuplex(tcpSocket);
       conn = new Client();
 
       conn
         .on("ready", () => {
+          sshPhase = "authenticated";
           send({ type: "output", data: `${copy.authenticated}\r\n` });
           conn?.shell(
             {
@@ -96,19 +102,30 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
               });
             }
           );
+          sshPhase = "sftp-initializing";
+          send({ type: "sftp-status", ready: false, message: "SFTP 初始化中..." });
           conn?.sftp((err, sftp) => {
             if (err) {
-              send({ type: "sftp-status", ready: false, message: `SFTP 会话初始化失败: ${err.message}` });
+              sshPhase = "error";
+              send({ type: "sftp-status", ready: false, message: `SFTP 初始化失败: ${err.message}` });
               return;
             }
             sftpSession = sftp;
+            sshPhase = "ready";
             send({ type: "sftp-status", ready: true });
           });
           startMetricsCollection();
         })
         .on("banner", (message) => send({ type: "output", data: `${message}\r\n` }))
-        .on("error", (error) => send({ type: "error", message: `${copy.connectFailed}${error.message}` }))
-        .on("close", () => send({ type: "output", data: `\r\n${copy.connectionClosed}\r\n` }));
+        .on("error", (error) => {
+          sshPhase = "error";
+          send({ type: "error", message: `${copy.connectFailed}${error.message}` });
+        })
+        .on("close", () => {
+          sshPhase = "error";
+          send({ type: "output", data: `\r\n${copy.connectionClosed}\r\n` });
+          send({ type: "sftp-status", ready: false, message: "SSH 连接已断开" });
+        });
 
       conn.connect({
         sock: tcpStream,
@@ -133,6 +150,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
         }
       });
     } catch (error) {
+      sshPhase = "error";
       const message = error instanceof Error ? error.message : copy.unknownError;
       send({ type: "error", message: `${copy.connectFailed}${message}` });
       close();
@@ -328,8 +346,18 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
 
   // ── SFTP operations ─────────────────────────────────────────────────
 
+  function sftpNotReadyMsg(): string {
+    switch (sshPhase) {
+      case "connecting": return "SSH 连接中，请等待...";
+      case "authenticated": return "SSH 已连接，SFTP 初始化中...";
+      case "sftp-initializing": return "SFTP 初始化中，请稍候...";
+      case "error": return "SSH 连接失败，无法使用 SFTP";
+      default: return "SFTP 会话未就绪";
+    }
+  }
+
   function handleSftpLs(requestId: string, path: string) {
-    if (!sftpSession) return send({ type: "sftp-error", requestId, message: "SFTP 会话未就绪" });
+    if (!sftpSession) return send({ type: "sftp-error", requestId, message: sftpNotReadyMsg() });
     try {
       sftpSession.readdir(path, (err, list) => {
         if (err) return send({ type: "sftp-error", requestId, message: err.message });
@@ -356,7 +384,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   }
 
   function handleSftpRead(requestId: string, path: string) {
-    if (!sftpSession) return send({ type: "sftp-error", requestId, message: "SFTP 会话未就绪" });
+    if (!sftpSession) return send({ type: "sftp-error", requestId, message: sftpNotReadyMsg() });
     try {
       sftpSession.stat(path, (statErr, stats) => {
         if (statErr) return send({ type: "sftp-error", requestId, message: statErr.message });
@@ -374,7 +402,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   }
 
   function handleSftpWrite(requestId: string, path: string, content: string) {
-    if (!sftpSession) return send({ type: "sftp-error", requestId, message: "SFTP 会话未就绪" });
+    if (!sftpSession) return send({ type: "sftp-error", requestId, message: sftpNotReadyMsg() });
     try {
       sftpSession.writeFile(path, content, { encoding: "utf8" }, (err) => {
         if (err) return send({ type: "sftp-error", requestId, message: err.message });
@@ -386,7 +414,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   }
 
   function handleSftpUpload(requestId: string, path: string, chunk: string, offset: number, done: boolean) {
-    if (!sftpSession) return send({ type: "sftp-error", requestId, message: "SFTP 会话未就绪" });
+    if (!sftpSession) return send({ type: "sftp-error", requestId, message: sftpNotReadyMsg() });
     try {
       if (offset === 0) {
         const stream = sftpSession.createWriteStream(path);
@@ -414,7 +442,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   }
 
   function handleSftpDownload(requestId: string, path: string) {
-    if (!sftpSession) return send({ type: "sftp-error", requestId, message: "SFTP 会话未就绪" });
+    if (!sftpSession) return send({ type: "sftp-error", requestId, message: sftpNotReadyMsg() });
     try {
       sftpSession.stat(path, (statErr, stats) => {
         if (statErr) return send({ type: "sftp-error", requestId, message: statErr.message });
