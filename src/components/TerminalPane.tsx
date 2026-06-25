@@ -13,9 +13,10 @@ type Props = {
   onMetrics: (metrics: ServerMetrics, processes: ProcessInfo[]) => void;
   onCommandSubmitted?: () => void;
   onSocketChange?: (socket: WebSocket | null) => void;
+  onOutput?: (data: string) => void;
 };
 
-export function TerminalPane({ profileId, connectionAttempt, language, connectingLabel, disconnectedLabel, onMetrics, onCommandSubmitted, onSocketChange }: Props) {
+export function TerminalPane({ profileId, connectionAttempt, language, connectingLabel, disconnectedLabel, onMetrics, onCommandSubmitted, onSocketChange, onOutput }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
@@ -77,9 +78,19 @@ export function TerminalPane({ profileId, connectionAttempt, language, connectin
       socket.send(JSON.stringify({ type: "resize", cols: terminal.cols, rows: terminal.rows } satisfies TerminalMessage));
       onSocketChangeRef.current?.(socket);
     });
+    function stripAnsi(text: string): string {
+      // 剥离所有 ANSI 转义序列
+      let clean = text.replace(/\x1b(?:\[[0-9;?]*[A-Za-z]|\][^\x07\x1b]*(?:\x07|\x1b\\)|[()][AB012]|[>=<]|.)/g, "");
+      // 将 \r\n 统一为 \n，\r 单独出现时当作 \n（回到行首 = 换行）
+      clean = clean.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      return clean;
+    }
     socket.addEventListener("message", (event) => {
       const message = JSON.parse(String(event.data)) as TerminalMessage;
-      if (message.type === "output") terminal.write(message.data);
+      if (message.type === "output") {
+        terminal.write(message.data);
+        onOutput?.(stripAnsi(message.data));
+      }
       if (message.type === "metrics") onMetrics(message.metrics, message.processes);
       if (message.type === "error") terminal.writeln(`\r\n${message.message}`);
     });

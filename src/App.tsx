@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AppSettings, Language, ProcessInfo, ServerMetrics, ServerProfile } from "../shared/types";
 import { CommandHistoryPanel } from "./components/CommandHistoryPanel";
 import { ConnectionPanel } from "./components/ConnectionPanel";
@@ -29,6 +29,7 @@ export default function App() {
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
   const [notice, setNotice] = useState("");
   const [sshSocket, setSshSocket] = useState<WebSocket | null>(null);
+  const sessionLogRef = useRef<string[]>([]);
 
   useEffect(() => {
     api
@@ -62,7 +63,26 @@ export default function App() {
 
   const handleSocketChange = useCallback((socket: WebSocket | null) => {
     setSshSocket(socket);
+    if (!socket) sessionLogRef.current = [];
   }, []);
+
+  const handleTerminalOutput = useCallback((data: string) => {
+    sessionLogRef.current.push(data);
+  }, []);
+
+  function handleDownloadSessionLog() {
+    const text = sessionLogRef.current.join("");
+    if (!text) return;
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ssh-session-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.log`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 
   function connectProfile(id: string) {
     setSelectedId(id);
@@ -139,6 +159,25 @@ export default function App() {
         />
         <div className="center-stack">
           <div className="context-line">
+            <button
+              type="button"
+              onClick={handleDownloadSessionLog}
+              title={t("downloadSessionLog")}
+              style={{
+                display: "flex", alignItems: "center", gap: "4px",
+                height: "100%",
+                background: "transparent", border: "none",
+                color: "#aaa", cursor: "pointer", fontSize: "12px", padding: "0 6px",
+                borderRight: "1px solid #333", marginRight: "8px"
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              下载日志
+            </button>
             <span>{selectedProfile ? `${selectedProfile.username}@${selectedProfile.host}` : t("noConnection")}</span>
             <small>{selectedProfile ? `${t("port")} ${selectedProfile.port}` : t("selectConnectionHint")}</small>
           </div>
@@ -151,6 +190,7 @@ export default function App() {
             onMetrics={handleMetrics}
             onCommandSubmitted={handleCommandSubmitted}
             onSocketChange={handleSocketChange}
+            onOutput={handleTerminalOutput}
           />
           <FileEditor socket={sshSocket} t={t} />
           <CommandHistoryPanel refreshKey={historyRefreshKey} t={t} />
