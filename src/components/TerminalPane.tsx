@@ -40,10 +40,12 @@ export function TerminalPane({ profileId, connectionAttempt, language, connectin
     const fit = new FitAddon();
     terminal.loadAddon(fit);
     terminal.open(hostRef.current);
-    fit.fit();
+    // 延迟调用 fit 确保容器已渲染完成
+    const doFit = () => { try { fit.fit(); } catch { /* 容器未就绪时跳过 */ } };
+    requestAnimationFrame(() => doFit());
     terminalRef.current = terminal;
 
-    const resize = () => fit.fit();
+    const resize = () => { try { fit.fit(); } catch { /* 容器未就绪时跳过 */ } };
     window.addEventListener("resize", resize);
     return () => {
       window.removeEventListener("resize", resize);

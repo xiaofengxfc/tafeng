@@ -247,8 +247,8 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
     `cat /proc/meminfo`,
     // Disk usage of root partition
     `df -B1 / | tail -1`,
-    // Top 8 processes by CPU
-    `ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu --no-headers | head -8`
+    // Top 8 processes by CPU (通用 ps aux 格式，兼容所有 Unix)
+    `ps aux 2>/dev/null | head -9 | tail -n +2`
   ].join(" && echo '---SECTION---' && ");
 
   function startMetricsCollection() {
@@ -343,6 +343,20 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   function parseProcesses(raw: string): ProcessInfo[] {
     return raw.split("\n").filter(Boolean).map(line => {
       const parts = line.trim().split(/\s+/);
+      // 自动检测输出格式：GNU "ps -eo pid,user,%cpu,%mem,comm" 首列是数字 PID
+      // BSD "ps aux" 首列是用户名
+      const isBsdFormat = isNaN(Number(parts[0]));
+      if (isBsdFormat) {
+        // BSD: USER PID %CPU %MEM VSZ RSS TT STAT STARTED TIME COMMAND
+        return {
+          pid: Number(parts[1]) || 0,
+          user: parts[0] ?? "",
+          cpu: Number(parts[2]) || 0,
+          memory: Number(parts[3]) || 0,
+          command: parts.slice(10).join(" ")  // COMMAND 从第11列开始
+        };
+      }
+      // GNU: PID USER %CPU %MEM COMMAND
       return {
         pid: Number(parts[0]),
         user: parts[1] ?? "",

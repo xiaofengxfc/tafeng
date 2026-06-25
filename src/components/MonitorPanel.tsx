@@ -23,17 +23,21 @@ export function MonitorPanel({ metrics, processes, t }: Props) {
 
       <div className="panel-title process-title">
         <ListTree size={18} />
-        <span>{t("processes")}</span>
+        <span>{t("processes")} ({processes.length})</span>
       </div>
       <div className="process-table">
-        {processes.map((process) => (
-          <div className="process-row" key={process.pid}>
-            <span>{process.pid}</span>
-            <span>{process.user}</span>
-            <span>{process.cpu.toFixed(1)}%</span>
-            <span title={process.command}>{process.command}</span>
-          </div>
-        ))}
+        {processes.length === 0 ? (
+          <small style={{ color: "#8e8e93", padding: "8px" }}>暂无进程数据</small>
+        ) : (
+          processes.map((process) => (
+            <div className="process-row" key={process.pid}>
+              <span>{process.pid}</span>
+              <span>{process.user}</span>
+              <span>{process.cpu.toFixed(1)}%</span>
+              <span title={process.command}>{process.command}</span>
+            </div>
+          ))
+        )}
       </div>
     </aside>
   );
