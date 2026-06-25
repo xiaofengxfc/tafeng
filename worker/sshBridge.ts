@@ -248,7 +248,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
     // Disk usage of root partition
     `df -B1 / | tail -1`,
     // Top 8 processes by CPU (ps -eo 格式，列数固定，兼容主流 Unix)
-    `ps aux 2>/dev/null | head -9 | tail -n +2`
+    `ps aux 2>/dev/null | head -10`
   ].join(" && echo '---SECTION---' && ");
 
   function startMetricsCollection() {
@@ -348,13 +348,16 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   function parseProcesses(raw: string): ProcessInfo[] {
     return raw.split("\n").filter(Boolean).map(line => {
       const parts = line.trim().split(/\s+/);
-      // 自动检测输出格式：GNU "ps -eo pid,user,%cpu,%mem,comm" 首列是数字 PID
-      // BSD "ps aux" 首列是用户名
-      const isBsdFormat = isNaN(Number(parts[0]));
-      if (isBsdFormat) {
-        // ps aux: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
-        // TIME 列总是匹配 H:MM:SS 或 MM:SS.S 格式，用它定位 COMMAND
-        const timeIdx = parts.findIndex(p => /^\d+:\d+/.test(p));
+      // 跳过标题行（首列包含非数字字符 "USER" 或 "PID" 但不是纯用户名）
+      if (/^[A-Z_]/.test(parts[0]) && parts[0] !== parts[0].toLowerCase()) return null;
+      // BSD "ps aux" 格式：首列是用户名（全小写）
+      if (isNaN(Number(parts[0]))) {
+        // ps aux 列位置：USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+        // TIME 列总是在前 12 列内的最后一个 H:MM:SS 格式字段
+        let timeIdx = -1;
+        for (let i = Math.min(parts.length - 1, 11); i >= 0; i--) {
+          if (/^\d+:\d+/.test(parts[i])) { timeIdx = i; break; }
+        }
         if (timeIdx === -1) return null;
         return {
           pid: Number(parts[1]) || 0,
@@ -364,7 +367,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
           command: parts.slice(timeIdx + 1).join(" ")
         };
       }
-      // GNU: PID USER %CPU %MEM COMMAND
+      // GNU "ps -eo" 格式：首列是数字 PID
       return {
         pid: Number(parts[0]),
         user: parts[1] ?? "",
