@@ -683,7 +683,7 @@ label {
 .light input,
 .light textarea,
 .light select {
-  background: #f5f5f7;
+  background: #ffffff;
   border-color: #d1d1d6;
   color: #1d1d1f;
 }
@@ -703,12 +703,22 @@ label {
   box-shadow: inset 0 0 0 1px #007aff;
 }
 
-.light .connection-item:hover,
-.light .file-list button:hover,
-.light .history-item,
-.light .process-row {
+.light .connection-item:hover {
   background: #e8e8ed;
 }
+
+.light .file-list button { background: transparent; }
+
+.light .file-list button:hover {
+  background: #f5f5f7;
+}
+
+.light .history-item,
+.light .process-row {
+  background: #f5f5f7;
+}
+
+.light .history-item code { color: #1d1d1f; }
 
 .light .context-line,
 .light .terminal-toolbar,
@@ -717,24 +727,46 @@ label {
   border-color: #d1d1d6;
 }
 
-.light .file-browser {
-  border-color: #d1d1d6;
-}
-
+.light .file-browser { border-color: #d1d1d6; }
 .light .totp-dialog { background: #ffffff; }
+
+.light .connection-actions button,
+.light .inline-icon-button { color: #8e8e93; }
 
 .light .connection-actions button:hover,
 .light .inline-icon-button:hover,
 .light .editor-toolbar button:hover,
 .light .icon-toggle:hover,
-.light .history-actions button:hover,
-.light .two-factor-button:hover,
-.light .ghost-button:hover {
-  background: #d1d1d6;
+.light .history-actions button:hover {
+  background: #e8e8ed;
 }
+
+.light .two-factor-button { background: #f5f5f7; }
+.light .two-factor-button:hover { background: #e8e8ed; }
+
+.light .ghost-button {
+  background: #f5f5f7;
+  border-color: #d1d1d6;
+}
+
+.light .ghost-button:hover { background: #e8e8ed; }
 
 .light .meter { background: #e8e8ed; }
 .light .meter span { background: #007aff; }
+.light .editor-pane textarea { background: #ffffff; }
+.light .editor-status { color: #8e8e93; }
+.light .panel-title { color: #8e8e93; }
+.light .file-list small,
+.light .connection-item small,
+.light .context-line small,
+.light .terminal-title,
+.light .metric-head small,
+.light .history-toolbar small,
+.light .history-item small,
+.light .empty-history,
+.light .totp-dialog p { color: #8e8e93; }
+.light ::-webkit-scrollbar-thumb { background: #d1d1d6; }
+.light ::-webkit-scrollbar-thumb:hover { background: #c7c7cc; }
 
 /* ── Login light theme ──────────────────────────────────────── */
 
@@ -756,7 +788,7 @@ label {
 
 .login-light input,
 .login-light select {
-  background: #f5f5f7;
+  background: #ffffff;
   border-color: #d1d1d6;
   color: #1d1d1f;
 }
@@ -769,7 +801,7 @@ label {
 
 .login-light .primary-button {
   background: #007aff;
-  color: #fff;
+  color: #ffffff;
 }
 
 .login-light .primary-button:hover { opacity: 0.85; }
