@@ -88,4 +88,5 @@ export type TerminalMessage =
   | { type: "sftp-write-result"; requestId: string; ok: boolean }
   | { type: "sftp-upload-progress"; requestId: string; offset: number; done: boolean }
   | { type: "sftp-download-chunk"; requestId: string; chunk: string; done: boolean }
-  | { type: "sftp-error"; requestId: string; message: string };
+  | { type: "sftp-error"; requestId: string; message: string }
+  | { type: "sftp-status"; ready: boolean; message?: string };

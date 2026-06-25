@@ -98,11 +98,11 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
           );
           conn?.sftp((err, sftp) => {
             if (err) {
-              send({ type: "error", message: `SFTP 会话初始化失败: ${err.message}` });
+              send({ type: "sftp-status", ready: false, message: `SFTP 会话初始化失败: ${err.message}` });
               return;
             }
             sftpSession = sftp;
-            send({ type: "output", data: "SFTP 会话已就绪\r\n" });
+            send({ type: "sftp-status", ready: true });
           });
           startMetricsCollection();
         })
