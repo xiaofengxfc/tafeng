@@ -17,3 +17,11 @@ fallthrough = true
 [assets]
 directory = "./dist/client"
 binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "TAFENG_KV"
+id = "4ad08647c20e4f36bb573c2f246de233"
+
+[[r2_buckets]]
+binding = "TAFENG_FILES"
+bucket_name = "tafeng-files"
