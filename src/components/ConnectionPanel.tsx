@@ -129,16 +129,16 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
             </button>
           ) : null}
         </div>
-        <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+        <label className="form-label">
           {t("name")}
           <input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder="例如：我的服务器" />
         </label>
-        <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+        <label className="form-label">
           IP 地址
           <input value={draft.host} onChange={(event) => setDraft({ ...draft, host: event.target.value })} placeholder="例如：192.168.1.1" />
         </label>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+        <div className="form-row">
+          <label className="form-label">
             {t("port")}
             <input
               value={draft.port}
@@ -148,12 +148,12 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
               max={65535}
             />
           </label>
-          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          <label className="form-label">
             {t("username")}
             <input value={draft.username} onChange={(event) => setDraft({ ...draft, username: event.target.value })} placeholder="例如：root" />
           </label>
         </div>
-        <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+        <label className="form-label">
           {t("credentialKind")}
           <select
             value={draft.credentialKind}
@@ -164,7 +164,7 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
           </select>
         </label>
         {draft.credentialKind === "password" ? (
-          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          <label className="form-label">
             {t("sshPassword")}
             <input
               value={draft.password ?? ""}
@@ -175,7 +175,7 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
           </label>
         ) : (
           <>
-          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          <label className="form-label">
             {t("privateKey")}
             <textarea
               value={draft.privateKey ?? ""}
@@ -184,7 +184,7 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
               rows={5}
             />
           </label>
-          <label style={{ margin: "8px 0 0", fontSize: "11px", color: "#8e8e93", fontWeight: 500 }}>
+          <label className="form-label">
             私钥密码
             <input
               value={draft.passphrase ?? ""}
