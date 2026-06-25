@@ -821,11 +821,59 @@ label {
     padding: 6px;
   }
   .center-stack {
-    grid-template-rows: auto minmax(260px, 50vh) minmax(160px, 240px) minmax(60px, 120px);
+    grid-template-rows: auto minmax(200px, 45vh) minmax(120px, 200px) minmax(50px, 100px);
     gap: 6px;
   }
   .file-browser {
     border-right: 0;
     border-bottom: 1px solid #38383a;
   }
+  .side-panel, .monitor-panel, .terminal-wrap,
+  .file-editor, .history-panel {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 6px 10px;
+    min-height: 44px;
+  }
+  .app-header > div:first-child { gap: 6px; }
+  .app-header strong { font-size: 14px; }
+  .app-header span { display: none; }
+  .workspace {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 4px;
+  }
+  .side-panel {
+    border-radius: 10px;
+    max-height: 200px;
+  }
+  .center-stack {
+    grid-template-rows: auto minmax(140px, 35vh) minmax(80px, 140px) minmax(40px, 70px);
+    gap: 4px;
+  }
+  .context-line {
+    font-size: 11px;
+    min-height: 28px;
+    padding: 0 8px;
+  }
+  .context-line button {
+    font-size: 11px !important;
+    padding: 0 4px !important;
+  }
+  .terminal-wrap, .file-editor, .history-panel, .monitor-panel {
+    border-radius: 10px;
+  }
+  .file-editor .file-browser { padding: 6px; }
+  .history-panel { padding: 6px; }
+  .monitor-panel { padding: 8px; }
+  .connection-item { padding: 6px 8px; }
+  .connection-form { margin-top: 6px; }
+  .connection-form input { padding: 7px 10px; font-size: 13px; }
+  .login-panel { padding: 16px; border-radius: 12px; }
+  .login-brand { margin: 18px 0; }
+  .login-brand h1 { font-size: 22px; }
 }
