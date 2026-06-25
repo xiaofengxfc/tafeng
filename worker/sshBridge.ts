@@ -33,6 +33,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   let tcpStream: CloudflareSocketDuplex | null = null;
   /** 连接阶段: connecting → authenticated → sftp-initializing → ready | error */
   let sshPhase: "connecting" | "authenticated" | "sftp-initializing" | "ready" | "error" = "connecting";
+  let sftpTimeout: ReturnType<typeof setTimeout> | null = null;
   /**
    * Tracks the visible content of the current terminal line from shell output.
    * Includes prompt + command text (e.g. "root@host:~# systemctl status nginx").
@@ -104,7 +105,15 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
           );
           sshPhase = "sftp-initializing";
           send({ type: "sftp-status", ready: false, message: "SFTP 初始化中..." });
+          sftpTimeout = setTimeout(() => {
+            if (sshPhase === "sftp-initializing") {
+              sshPhase = "error";
+              send({ type: "sftp-status", ready: false, message: "SFTP 初始化超时 — 服务器可能未启用 SFTP 子系统，请在服务器上检查 /etc/ssh/sshd_config 中是否包含 \"Subsystem sftp /usr/lib/openssh/sftp-server\"" });
+            }
+          }, 15_000);
           conn?.sftp((err, sftp) => {
+            clearTimeout(sftpTimeout!);
+            sftpTimeout = null;
             if (err) {
               sshPhase = "error";
               send({ type: "sftp-status", ready: false, message: `SFTP 初始化失败: ${err.message}` });
@@ -466,6 +475,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
   }
 
   function close() {
+    if (sftpTimeout) { clearTimeout(sftpTimeout); sftpTimeout = null; }
     if (metricsTimer) { clearInterval(metricsTimer); metricsTimer = null; }
     for (const stream of uploadStreams.values()) stream.end();
     uploadStreams.clear();

@@ -105,7 +105,12 @@ export function FileEditor({ socket, t }: Props) {
         setLoading(false);
         setStatus(msg.message);
       } else if (msg.type === "sftp-status") {
-        if (!msg.ready) setStatus(msg.message ?? "SFTP 初始化失败");
+        if (msg.ready) {
+          setStatus("");
+          listDirectory(currentPath);
+        } else {
+          setStatus(msg.message ?? "SFTP 初始化失败");
+        }
       }
     }
 
