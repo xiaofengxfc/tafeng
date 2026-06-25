@@ -247,7 +247,7 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
     `cat /proc/meminfo`,
     // Disk usage of root partition
     `df -B1 / | tail -1`,
-    // Top 8 processes by CPU (通用 ps aux 格式，兼容所有 Unix)
+    // Top 8 processes by CPU (ps -eo 格式，列数固定，兼容主流 Unix)
     `ps aux 2>/dev/null | head -9 | tail -n +2`
   ].join(" && echo '---SECTION---' && ");
 
@@ -340,6 +340,11 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
     return { used: usedGb, total: totalGb, percent };
   }
 
+  /** 解析数值字段，兼容 "0.0%"、"0.5" 等格式 */
+  function parsePerc(val: string): number {
+    return Number(val.replace(/[^0-9.-]/g, "")) || 0;
+  }
+
   function parseProcesses(raw: string): ProcessInfo[] {
     return raw.split("\n").filter(Boolean).map(line => {
       const parts = line.trim().split(/\s+/);
@@ -347,24 +352,27 @@ export function createSshBridge(socket: WebSocket, options: SshBridgeOptions): S
       // BSD "ps aux" 首列是用户名
       const isBsdFormat = isNaN(Number(parts[0]));
       if (isBsdFormat) {
-        // BSD: USER PID %CPU %MEM VSZ RSS TT STAT STARTED TIME COMMAND
+        // ps aux: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+        // TIME 列总是匹配 H:MM:SS 或 MM:SS.S 格式，用它定位 COMMAND
+        const timeIdx = parts.findIndex(p => /^\d+:\d+/.test(p));
+        if (timeIdx === -1) return null;
         return {
           pid: Number(parts[1]) || 0,
           user: parts[0] ?? "",
-          cpu: Number(parts[2]) || 0,
-          memory: Number(parts[3]) || 0,
-          command: parts.slice(10).join(" ")  // COMMAND 从第11列开始
+          cpu: parsePerc(parts[2]),
+          memory: parsePerc(parts[3]),
+          command: parts.slice(timeIdx + 1).join(" ")
         };
       }
       // GNU: PID USER %CPU %MEM COMMAND
       return {
         pid: Number(parts[0]),
         user: parts[1] ?? "",
-        cpu: Number(parts[2]) || 0,
-        memory: Number(parts[3]) || 0,
+        cpu: parsePerc(parts[2]),
+        memory: parsePerc(parts[3]),
         command: parts.slice(4).join(" ")
       };
-    });
+    }).filter(<T>(x: T | null): x is T => x !== null);
   }
 
   // ── SFTP operations ─────────────────────────────────────────────────
