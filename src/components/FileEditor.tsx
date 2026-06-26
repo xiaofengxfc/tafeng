@@ -17,6 +17,8 @@ export function FileEditor({ socket, t }: Props) {
   const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const isUpdatingRef = useRef(false);
   const downloadChunksRef = useRef<Map<string, string[]>>(new Map());
 
   const sendMessage = useCallback(
@@ -42,6 +44,13 @@ export function FileEditor({ socket, t }: Props) {
     if (!socket) return;
     listDirectory(currentPath);
   }, [socket, currentPath, listDirectory]);
+
+  // Sync content to editor div when file changes
+  useEffect(() => {
+    if (editorRef.current && !isUpdatingRef.current) {
+      editorRef.current.innerText = content;
+    }
+  }, [content]);
 
   // Listen for WebSocket messages
   useEffect(() => {
@@ -245,7 +254,16 @@ export function FileEditor({ socket, t }: Props) {
             </button>
           </div>
         </div>
-        <textarea value={content} onChange={(event) => setContent(event.target.value)} spellCheck={false} />
+        <div
+          ref={editorRef}
+          className="editor-content"
+          contentEditable
+          suppressContentEditableWarning
+          onInput={(e) => {
+            const text = (e.target as HTMLElement).innerText;
+            if (text !== content) setContent(text);
+          }}
+        />
         <small className="editor-status">{status}</small>
       </div>
       <input ref={fileInputRef} type="file" style={{ display: "none" }} onChange={onFileSelected} />

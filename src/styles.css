@@ -163,6 +163,9 @@ label {
   .mobile-panel {
     display: flex;
     flex-direction: column;
+    background: #1c1c1e;
+    border-radius: 10px;
+    overflow: hidden;
   }
   .mobile-panel-toggle {
     display: flex;
@@ -170,26 +173,28 @@ label {
     gap: 8px;
     width: 100%;
     border: 0;
-    border-radius: 8px 8px 0 0;
     background: #151517;
-    color: #ebebed;
-    padding: 8px 12px;
+    color: #8e8e93;
+    padding: 10px 12px;
     font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
   }
-  .mobile-panel-toggle:hover { background: #2c2c2e; }
+  .mobile-panel-toggle:hover { color: #ebebed; }
   .mobile-panel-toggle span { flex: 1; text-align: left; }
   .mobile-panel-content {
     display: none;
-    border-radius: 0 0 8px 8px;
-    overflow: hidden;
   }
   .mobile-panel-content.open {
     display: block;
   }
   .mobile-panel-content > * {
     border-radius: 0 !important;
+    box-shadow: none !important;
   }
+  .light .mobile-panel { background: #ffffff; }
+  .light .mobile-panel-toggle { background: #e8e8ed; color: #8e8e93; }
+  .light .mobile-panel-toggle:hover { color: #1d1d1f; }
 }
 
 /* ── App shell ─────────────────────────────────────────────── */
@@ -363,10 +368,11 @@ label {
 
 .center-stack {
   display: grid;
-  grid-template-rows: auto minmax(80px, 1fr) minmax(120px, 200px) minmax(70px, 140px);
+  grid-template-rows: auto 1fr auto auto;
   gap: 8px;
   min-width: 0;
   min-height: 0;
+  height: 100%;
 }
 
 .context-line {
@@ -476,8 +482,9 @@ label {
 
 .file-editor {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  min-height: 0;
+  grid-template-columns: 180px 1fr;
+  min-height: 100px;
+  overflow: hidden;
 }
 
 .file-browser {
@@ -485,7 +492,7 @@ label {
   border-right: 1px solid #38383a;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
 }
 
 .file-browser .panel-title input { padding: 7px 9px; }
@@ -522,8 +529,20 @@ label {
 
 .editor-pane {
   min-width: 0;
-  display: grid;
-  grid-template-rows: 34px minmax(0, 1fr) 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.editor-pane textarea {
+  flex: 1;
+  min-height: 40px;
+  padding-bottom: 24px;
+  resize: vertical;
+}
+
+.editor-pane .editor-status {
+  flex-shrink: 0;
 }
 
 .editor-toolbar {
@@ -577,6 +596,27 @@ label {
 .editor-pane textarea {
   resize: vertical;
   max-width: 100%;
+}
+
+.editor-content {
+  flex: 1;
+  min-height: 40px;
+  padding: 9px 12px;
+  font-family: "SFMono-Regular", "Cascadia Code", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #ebebed;
+  background: #0a0a0b;
+  outline: none;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+
+.light .editor-content {
+  background: #ffffff;
+  color: #1d1d1f;
 }
 
 .editor-status {
@@ -952,8 +992,7 @@ label {
     border-right: 0;
     border-bottom: 1px solid #38383a;
   }
-  .side-panel, .monitor-panel, .terminal-wrap,
-  .file-editor, .history-panel {
+  .side-panel, .monitor-panel, .terminal-wrap {
     border-radius: 10px;
   }
 }
@@ -1002,20 +1041,19 @@ label {
     padding: 0 3px !important;
   }
   .context-line button svg { width: 10px; height: 10px; }
-  .terminal-wrap, .file-editor, .history-panel, .monitor-panel {
+  .terminal-wrap, .monitor-panel {
     border-radius: 8px;
   }
   .terminal-toolbar { height: 24px; font-size: 10px; padding: 0 6px; }
   .terminal-host { padding: 2px; min-height: 60px; }
   .terminal-host .xterm { font-size: 11px !important; }
   .terminal-host .xterm-rows { font-size: 11px; }
-  .mobile-panel-content.open { min-height: 350px; }
+  .mobile-panel-content.open { min-height: 150px; }
   .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; }
+  .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; max-height: 120px; overflow-y: auto; }
   .file-list { overflow-y: visible; }
-  .history-list { overflow-y: visible; }
   .file-list button { padding: 4px 6px; font-size: 11px; }
-  .editor-pane { grid-template-rows: 28px minmax(0, 1fr) 18px; }
+  .editor-pane { grid-template-rows: 28px 1fr; }
   .editor-toolbar { height: 28px; padding: 0 6px; font-size: 11px; }
   .editor-pane textarea { font-size: 11px; }
   .editor-status { font-size: 10px; padding: 2px 6px; }
@@ -1051,10 +1089,11 @@ label {
   .terminal-host { min-height: 40px; }
   .terminal-host .xterm { font-size: 10px !important; }
   .mobile-panel-toggle { font-size: 11px; padding: 6px 8px; }
-  .mobile-panel-content.open { min-height: 280px; }
+  .mobile-panel-content.open { min-height: 75vh; }
   .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .file-browser { overflow-y: auto; }
+  .file-browser { overflow-y: auto; max-height: 100px; }
   .history-panel { overflow-y: auto; }
+  .editor-pane { grid-template-rows: 24px 1fr; }
   .history-panel { padding: 2px; }
   .history-item { padding: 3px 4px; font-size: 10px; }
   .history-item small { display: none; }
