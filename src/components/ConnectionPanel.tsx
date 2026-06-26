@@ -146,6 +146,15 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
         </button>
         <div className={`mobile-form-content ${formOpen ? "open" : ""}`}>
         <form className="connection-form" onSubmit={submit}>
+        <div className="panel-title compact desktop-only">
+          {editingProfile ? <Pencil size={16} /> : <Plus size={16} />}
+          <span>{editingProfile ? t("editConnection") : t("saveVps")}</span>
+          {editingProfile ? (
+            <button className="inline-icon-button" type="button" title={t("cancel")} onClick={cancelEdit}>
+              <X size={15} />
+            </button>
+          ) : null}
+        </div>
         <label className="form-label">
           {t("name")}
           <input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder="例如：我的服务器" />

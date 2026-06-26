@@ -358,7 +358,10 @@ label {
 
 .connection-form { margin-top: 8px; }
 
+.mobile-form-toggle { display: none; }
 .mobile-form-add-btn { display: none; }
+.desktop-only { display: flex; }
+@media (max-width: 760px) { .desktop-only { display: none; } }
 
 @media (min-width: 761px) {
   .mobile-form-add-btn {
