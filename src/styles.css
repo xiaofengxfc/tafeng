@@ -1048,7 +1048,7 @@ label {
   .terminal-host { padding: 2px; min-height: 60px; }
   .terminal-host .xterm { font-size: 11px !important; }
   .terminal-host .xterm-rows { font-size: 11px; }
-  .mobile-panel-content.open { min-height: 150px; }
+  .mobile-panel-content.open { min-height: 150px; max-height: 60vh; overflow-y: auto; }
   .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; max-height: 120px; overflow-y: auto; }
   .file-list { overflow-y: visible; }
@@ -1089,7 +1089,7 @@ label {
   .terminal-host { min-height: 40px; }
   .terminal-host .xterm { font-size: 10px !important; }
   .mobile-panel-toggle { font-size: 11px; padding: 6px 8px; }
-  .mobile-panel-content.open { min-height: 75vh; }
+  .mobile-panel-content.open { min-height: 120px; max-height: 55vh; overflow-y: auto; }
   .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .file-browser { overflow-y: auto; max-height: 100px; }
   .history-panel { overflow-y: auto; }
