@@ -912,47 +912,93 @@ label {
 
 @media (max-width: 480px) {
   .app-header {
-    padding: 6px 10px;
-    min-height: 44px;
+    padding: 4px 8px;
+    min-height: 40px;
   }
-  .app-header > div:first-child { gap: 6px; }
-  .app-header strong { font-size: 14px; }
+  .app-header > div:first-child { gap: 4px; }
+  .app-header strong { font-size: 13px; }
   .app-header span { display: none; }
   .workspace {
     grid-template-columns: 1fr;
-    gap: 4px;
-    padding: 4px;
+    gap: 3px;
+    padding: 3px;
+    min-height: calc(100vh - 40px);
   }
   .side-panel {
-    border-radius: 10px;
-    max-height: 200px;
+    border-radius: 8px;
+    max-height: 160px;
+    padding: 6px;
   }
+  .panel-title { font-size: 11px; margin-bottom: 6px; }
+  .connection-item { padding: 4px 6px; font-size: 12px; }
+  .connection-item small { font-size: 10px; }
+  .connection-actions button { width: 24px; height: 24px; }
+  .connection-form { margin-top: 4px; }
+  .connection-form input { padding: 5px 8px; font-size: 12px; }
+  .form-label { margin-top: 6px; font-size: 10px; }
+  .form-row { gap: 4px; }
   .center-stack {
-    grid-template-rows: auto minmax(80px, 40vh) minmax(60px, 120px) minmax(30px, 60px);
-    gap: 4px;
+    grid-template-rows: auto minmax(60px, 45vh) minmax(40px, 100px) minmax(20px, 50px);
+    gap: 3px;
   }
   .context-line {
-    font-size: 11px;
-    min-height: 28px;
-    padding: 0 8px;
+    font-size: 10px;
+    min-height: 24px;
+    padding: 0 6px;
   }
   .context-line button {
-    font-size: 11px !important;
-    padding: 0 4px !important;
+    font-size: 10px !important;
+    padding: 0 3px !important;
   }
+  .context-line button svg { width: 10px; height: 10px; }
   .terminal-wrap, .file-editor, .history-panel, .monitor-panel {
-    border-radius: 10px;
+    border-radius: 8px;
   }
-  .terminal-host { padding: 4px; }
-  .terminal-host .xterm { font-size: 12px !important; }
-  .terminal-host .xterm-rows { font-size: 12px; }
-  .file-editor .file-browser { padding: 6px; }
-  .history-panel { padding: 6px; }
-  .monitor-panel { padding: 8px; }
-  .connection-item { padding: 6px 8px; }
-  .connection-form { margin-top: 6px; }
-  .connection-form input { padding: 7px 10px; font-size: 13px; }
-  .login-panel { padding: 16px; border-radius: 12px; }
-  .login-brand { margin: 18px 0; }
-  .login-brand h1 { font-size: 22px; }
+  .terminal-toolbar { height: 24px; font-size: 10px; padding: 0 6px; }
+  .terminal-host { padding: 2px; min-height: 60px; }
+  .terminal-host .xterm { font-size: 11px !important; }
+  .terminal-host .xterm-rows { font-size: 11px; }
+  .file-editor { grid-template-columns: 1fr; }
+  .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; }
+  .file-list button { padding: 4px 6px; font-size: 11px; }
+  .editor-pane { grid-template-rows: 28px minmax(0, 1fr) 18px; }
+  .editor-toolbar { height: 28px; padding: 0 6px; font-size: 11px; }
+  .editor-pane textarea { font-size: 11px; }
+  .editor-status { font-size: 10px; padding: 2px 6px; }
+  .history-panel { padding: 4px; }
+  .history-item { padding: 4px 6px; font-size: 11px; }
+  .monitor-panel { padding: 6px; }
+  .metric-row { margin-bottom: 8px; }
+  .metric-head { font-size: 11px; margin-bottom: 4px; }
+  .process-row { font-size: 10px; padding: 3px 4px; gap: 3px; }
+  .process-row { grid-template-columns: 30px 28px 32px 32px minmax(0, 1fr); }
+  .login-panel { padding: 12px; border-radius: 10px; }
+  .login-brand { margin: 14px 0; }
+  .login-brand h1 { font-size: 20px; }
+  .login-panel input, .login-panel select { padding: 7px 10px; font-size: 13px; }
+}
+
+@media (max-width: 380px) {
+  .app-header strong { font-size: 12px; }
+  .workspace { gap: 2px; padding: 2px; }
+  .side-panel { max-height: 120px; padding: 4px; }
+  .connection-item { padding: 3px 4px; }
+  .connection-item small { display: none; }
+  .connection-actions button { width: 22px; height: 22px; }
+  .center-stack { gap: 2px; }
+  .center-stack {
+    grid-template-rows: auto minmax(50px, 50vh) minmax(30px, 80px) minmax(15px, 40px);
+  }
+  .context-line { min-height: 22px; font-size: 9px; padding: 0 4px; }
+  .context-line small { display: none; }
+  .context-line button { font-size: 9px !important; padding: 0 2px !important; }
+  .terminal-toolbar { height: 22px; font-size: 9px; padding: 0 4px; }
+  .terminal-host { min-height: 40px; }
+  .terminal-host .xterm { font-size: 10px !important; }
+  .file-editor { display: none; }
+  .history-panel { padding: 2px; }
+  .history-item { padding: 3px 4px; font-size: 10px; }
+  .history-item small { display: none; }
+  .monitor-panel { display: none; }
+  .panel-title { font-size: 10px; margin-bottom: 4px; }
 }
