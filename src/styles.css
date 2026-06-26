@@ -358,6 +358,7 @@ label {
 
 .connection-form { margin-top: 8px; }
 
+.monitor-mobile { display: none; }
 .mobile-form-toggle { display: none; }
 .mobile-form-add-btn { display: none; }
 .desktop-only { display: flex; }
@@ -978,6 +979,7 @@ label {
     padding: 8px;
   }
   .monitor-panel { grid-column: 1 / -1; }
+  .monitor-desktop { display: none; }
 }
 
 @media (max-width: 760px) {
@@ -1095,7 +1097,8 @@ label {
   .history-item { padding: 3px 4px; font-size: 10px; }
   .history-item small { display: none; }
   .history-actions button { width: 22px; height: 22px; }
-  .monitor-panel { display: none; }
+  .monitor-mobile { display: flex; }
+  .monitor-desktop { display: none; }
   .panel-title { font-size: 10px; margin-bottom: 4px; }
   .form-label input, .form-label select { font-size: 11px; padding: 5px 6px; }
 }

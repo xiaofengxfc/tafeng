@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, Clock3, FileText } from "lucide-react";
+import { Activity, ChevronDown, ChevronRight, Clock3, FileText } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AppSettings, Language, ProcessInfo, ServerMetrics, ServerProfile } from "../shared/types";
 import { CommandHistoryPanel } from "./components/CommandHistoryPanel";
@@ -214,8 +214,20 @@ export default function App() {
               <CommandHistoryPanel refreshKey={historyRefreshKey} t={t} />
             </div>
           </div>
+          <div className="mobile-panel monitor-mobile">
+            <button className="mobile-panel-toggle" type="button" onClick={() => setPanelsOpen(p => ({ ...p, monitor: !p.monitor }))}>
+              <Activity size={16} />
+              <span>{t("liveStatus")}</span>
+              {panelsOpen.monitor ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </button>
+            <div className={`mobile-panel-content ${panelsOpen.monitor ? "open" : ""}`}>
+              <MonitorPanel metrics={metrics} processes={processes} t={t} />
+            </div>
+          </div>
         </div>
-        <MonitorPanel metrics={metrics} processes={processes} t={t} />
+        <div className="monitor-desktop">
+          <MonitorPanel metrics={metrics} processes={processes} t={t} />
+        </div>
       </main>
     </div>
   );
