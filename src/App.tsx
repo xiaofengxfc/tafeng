@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronRight, Clock3, FileText } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AppSettings, Language, ProcessInfo, ServerMetrics, ServerProfile } from "../shared/types";
 import { CommandHistoryPanel } from "./components/CommandHistoryPanel";
@@ -30,6 +31,7 @@ export default function App() {
   const [notice, setNotice] = useState("");
   const [sshSocket, setSshSocket] = useState<WebSocket | null>(null);
   const sessionLogRef = useRef<string[]>([]);
+  const [panelsOpen, setPanelsOpen] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     api
@@ -192,8 +194,26 @@ export default function App() {
             onSocketChange={handleSocketChange}
             onOutput={handleTerminalOutput}
           />
-          <FileEditor socket={sshSocket} t={t} />
-          <CommandHistoryPanel refreshKey={historyRefreshKey} t={t} />
+          <div className="mobile-panel">
+            <button className="mobile-panel-toggle" type="button" onClick={() => setPanelsOpen(p => ({ ...p, files: !p.files }))}>
+              <FileText size={16} />
+              <span>{t("fileManager")}</span>
+              {panelsOpen.files ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </button>
+            <div className={`mobile-panel-content ${panelsOpen.files ? "open" : ""}`}>
+              <FileEditor socket={sshSocket} t={t} />
+            </div>
+          </div>
+          <div className="mobile-panel">
+            <button className="mobile-panel-toggle" type="button" onClick={() => setPanelsOpen(p => ({ ...p, history: !p.history }))}>
+              <Clock3 size={16} />
+              <span>{t("commandHistory")}</span>
+              {panelsOpen.history ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </button>
+            <div className={`mobile-panel-content ${panelsOpen.history ? "open" : ""}`}>
+              <CommandHistoryPanel refreshKey={historyRefreshKey} t={t} />
+            </div>
+          </div>
         </div>
         <MonitorPanel metrics={metrics} processes={processes} t={t} />
       </main>

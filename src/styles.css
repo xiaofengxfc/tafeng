@@ -149,6 +149,49 @@ label {
 
 .form-error, .notice { color: #ff453a; }
 
+/* ── Mobile collapsible panels ───────────────────────────── */
+
+.mobile-panel { display: contents; }
+
+.mobile-panel-toggle {
+  display: none;
+}
+
+.mobile-panel-content { display: contents; }
+
+@media (max-width: 760px) {
+  .mobile-panel {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-panel-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    border: 0;
+    border-radius: 8px 8px 0 0;
+    background: #151517;
+    color: #ebebed;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .mobile-panel-toggle:hover { background: #2c2c2e; }
+  .mobile-panel-toggle span { flex: 1; text-align: left; }
+  .mobile-panel-content {
+    display: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+  }
+  .mobile-panel-content.open {
+    display: block;
+  }
+  .mobile-panel-content > * {
+    border-radius: 0 !important;
+  }
+}
+
 /* ── App shell ─────────────────────────────────────────────── */
 
 .app-shell {
@@ -896,8 +939,13 @@ label {
     gap: 6px;
     padding: 6px;
   }
+  .workspace {
+    min-height: 0;
+    overflow-y: auto;
+    height: calc(100vh - 50px);
+  }
   .center-stack {
-    grid-template-rows: auto minmax(100px, 50vh) minmax(100px, 180px) minmax(40px, 80px);
+    grid-template-rows: auto auto auto auto;
     gap: 6px;
   }
   .file-browser {
@@ -920,9 +968,11 @@ label {
   .app-header span { display: none; }
   .workspace {
     grid-template-columns: 1fr;
-    gap: 3px;
-    padding: 3px;
-    min-height: calc(100vh - 40px);
+    gap: 4px;
+    padding: 4px;
+    min-height: 0;
+    overflow-y: auto;
+    height: calc(100vh - 40px);
   }
   .side-panel {
     border-radius: 8px;
@@ -938,8 +988,9 @@ label {
   .form-label { margin-top: 6px; font-size: 10px; }
   .form-row { gap: 4px; }
   .center-stack {
-    grid-template-rows: auto minmax(60px, 45vh) minmax(40px, 100px) minmax(20px, 50px);
-    gap: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
   .context-line {
     font-size: 10px;
@@ -958,10 +1009,10 @@ label {
   .terminal-host { padding: 2px; min-height: 60px; }
   .terminal-host .xterm { font-size: 11px !important; }
   .terminal-host .xterm-rows { font-size: 11px; }
-  .file-editor { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
-  .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; overflow-y: auto; }
+  .mobile-panel-content.open { min-height: 350px; }
+  .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; }
   .file-list { overflow-y: visible; }
-  .history-panel { overflow-y: auto; }
   .history-list { overflow-y: visible; }
   .file-list button { padding: 4px 6px; font-size: 11px; }
   .editor-pane { grid-template-rows: 28px minmax(0, 1fr) 18px; }
@@ -988,9 +1039,10 @@ label {
   .connection-item { padding: 3px 4px; }
   .connection-item small { display: none; }
   .connection-actions button { width: 22px; height: 22px; }
-  .center-stack { gap: 2px; }
   .center-stack {
-    grid-template-rows: auto minmax(50px, 50vh) minmax(30px, 80px) minmax(15px, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
   }
   .context-line { min-height: 22px; font-size: 9px; padding: 0 4px; }
   .context-line small { display: none; }
@@ -998,7 +1050,9 @@ label {
   .terminal-toolbar { height: 22px; font-size: 9px; padding: 0 4px; }
   .terminal-host { min-height: 40px; }
   .terminal-host .xterm { font-size: 10px !important; }
-  .file-editor { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  .mobile-panel-toggle { font-size: 11px; padding: 6px 8px; }
+  .mobile-panel-content.open { min-height: 280px; }
+  .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .file-browser { overflow-y: auto; }
   .history-panel { overflow-y: auto; }
   .history-panel { padding: 2px; }
