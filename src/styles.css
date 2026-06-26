@@ -1013,13 +1013,10 @@ label {
   }
 }
 
-@media (max-width: 480px) {
-  .app-header {
-    padding: 4px 8px;
-    min-height: 40px;
-  }
-  .app-header > div:first-child { gap: 4px; }
-  .app-header strong { font-size: 13px; }
+@media (max-width: 520px) {
+  .app-header { padding: 6px 10px; min-height: 44px; }
+  .app-header > div:first-child { gap: 6px; }
+  .app-header strong { font-size: 14px; }
   .app-header span { display: none; }
   .workspace {
     grid-template-columns: 1fr;
@@ -1027,70 +1024,42 @@ label {
     padding: 4px;
     min-height: 0;
     overflow-y: auto;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 44px);
   }
-  .side-panel {
-    border-radius: 8px;
-    max-height: 160px;
-    padding: 6px;
-  }
+  .side-panel { border-radius: 8px; max-height: 180px; padding: 6px; }
   .panel-title { font-size: 11px; margin-bottom: 6px; }
-  .mobile-form-add-btn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #8e8e93; cursor: pointer; }
-  .side-panel { max-height: 140px; }
   .connection-list { gap: 4px; }
-  .connection-item { padding: 3px 5px; font-size: 11px; gap: 4px; }
-  .connection-main { gap: 2px; }
+  .connection-item { padding: 4px 6px; font-size: 11px; gap: 4px; }
   .connection-item small { font-size: 9px; }
   .connection-actions button { width: 22px; height: 22px; }
   .connection-actions button svg { width: 12px; height: 12px; }
-  .connection-form { margin-top: 4px; }
   .connection-form input { padding: 5px 8px; font-size: 12px; }
   .form-label { margin-top: 6px; font-size: 10px; }
   .form-label input, .form-label select { font-size: 12px; padding: 6px 8px; }
-  .form-row { gap: 4px; }
-  .center-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .context-line {
-    font-size: 10px;
-    min-height: 24px;
-    padding: 0 6px;
-  }
-  .context-line button {
-    font-size: 10px !important;
-    padding: 0 3px !important;
-  }
+  .center-stack { display: flex; flex-direction: column; gap: 4px; }
+  .context-line { font-size: 10px; min-height: 24px; padding: 0 6px; }
+  .context-line button { font-size: 10px !important; padding: 0 3px !important; }
   .context-line button svg { width: 10px; height: 10px; }
-  .terminal-wrap, .monitor-panel {
-    border-radius: 8px;
-  }
+  .terminal-wrap, .monitor-panel { border-radius: 8px; }
   .terminal-toolbar { height: 24px; font-size: 10px; padding: 0 6px; }
   .terminal-host { padding: 2px; min-height: 60px; }
-  .terminal-host .xterm { font-size: 11px !important; }
-  .terminal-host .xterm-rows { font-size: 11px; }
-  .mobile-panel-content.open { min-height: 150px; max-height: 60vh; overflow-y: auto; }
+  .terminal-host .xterm { font-size: 12px !important; }
+  .mobile-panel-content.open, .mobile-form-content.open { min-height: 150px; max-height: 60vh; overflow-y: auto; }
   .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; max-height: 120px; overflow-y: auto; }
-  .file-list { overflow-y: visible; }
   .file-list button { padding: 4px 6px; font-size: 11px; }
   .editor-pane { display: flex; flex-direction: column; }
-  .editor-pane textarea { flex: 1; min-height: 40px; }
   .editor-toolbar { height: 28px; padding: 0 6px; font-size: 11px; }
-  .editor-pane textarea { font-size: 11px; }
+  .editor-pane textarea { flex: 1; min-height: 40px; font-size: 12px; }
   .editor-status { font-size: 10px; padding: 2px 6px; }
   .history-panel { padding: 4px; }
   .history-item { padding: 4px 6px; font-size: 11px; }
   .monitor-panel { padding: 6px; }
   .metric-row { margin-bottom: 8px; }
   .metric-head { font-size: 11px; margin-bottom: 4px; }
-  .process-row { font-size: 10px; padding: 3px 4px; gap: 3px; }
-  .process-row { grid-template-columns: 30px 28px 32px 32px minmax(0, 1fr); }
+  .process-row { font-size: 10px; padding: 3px 4px; gap: 3px; grid-template-columns: 28px 26px 30px 30px minmax(0, 1fr); }
   .login-panel { padding: 12px; border-radius: 10px; }
-  .login-brand { margin: 14px 0; }
   .login-brand h1 { font-size: 20px; }
-  .login-panel input, .login-panel select { padding: 7px 10px; font-size: 13px; }
 }
 
 @media (max-width: 380px) {
@@ -1129,4 +1098,19 @@ label {
   .monitor-panel { display: none; }
   .panel-title { font-size: 10px; margin-bottom: 4px; }
   .form-label input, .form-label select { font-size: 11px; padding: 5px 6px; }
+}
+
+.editor-content { -webkit-user-modify: read-write-plaintext-only; }
+
+/* Touch devices: larger tap targets */
+@media (hover: none) and (pointer: coarse) {
+  .connection-actions button, .editor-toolbar button, .history-actions button { width: 36px; height: 36px; }
+  .connection-actions button svg, .editor-toolbar button svg, .history-actions button svg { width: 18px; height: 18px; }
+  .file-list button { padding: 10px 12px; }
+  .mobile-panel-toggle, .mobile-form-toggle { padding: 12px 14px; min-height: 44px; }
+  .mobile-form-add-btn { width: 36px; height: 36px; }
+  .form-label input, .form-label select { min-height: 40px; font-size: 14px; }
+  .secondary-button { min-height: 44px; font-size: 14px; }
+  .panel-title { min-height: 36px; }
+  .context-line { min-height: 36px; }
 }
