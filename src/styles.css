@@ -1095,36 +1095,38 @@ label {
 
 @media (max-width: 380px) {
   .app-header strong { font-size: 12px; }
-  .workspace { gap: 2px; padding: 2px; }
-  .side-panel { max-height: 120px; padding: 4px; }
-  .side-panel { max-height: 110px; padding: 3px; }
+  .workspace { gap: 2px; padding: 2px; min-height: 0; overflow-y: auto; height: calc(100vh - 40px); }
+  .side-panel { max-height: 110px; padding: 3px; border-radius: 6px; }
   .connection-list { gap: 3px; }
   .connection-item { padding: 2px 4px; font-size: 10px; }
   .connection-main { gap: 1px; }
   .connection-item small { display: none; }
   .connection-actions button { width: 20px; height: 20px; }
   .connection-actions button svg { width: 11px; height: 11px; }
-  .center-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .context-line { min-height: 22px; font-size: 9px; padding: 0 4px; }
+  .center-stack { display: flex; flex-direction: column; gap: 2px; }
+  .context-line { min-height: 20px; font-size: 9px; padding: 0 4px; }
   .context-line small { display: none; }
   .context-line button { font-size: 9px !important; padding: 0 2px !important; }
-  .terminal-toolbar { height: 22px; font-size: 9px; padding: 0 4px; }
-  .terminal-host { min-height: 40px; }
+  .terminal-wrap { border-radius: 6px; }
+  .terminal-toolbar { height: 20px; font-size: 9px; padding: 0 4px; }
+  .terminal-host { padding: 2px; min-height: 40px; }
   .terminal-host .xterm { font-size: 10px !important; }
-  .mobile-panel-toggle { font-size: 11px; padding: 6px 8px; }
-  .mobile-panel-content.open { min-height: 120px; max-height: 55vh; overflow-y: auto; }
-  .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .file-browser { overflow-y: auto; max-height: 100px; }
-  .history-panel { overflow-y: auto; }
-  .editor-pane { display: flex; flex-direction: column; }
-  .editor-pane textarea { flex: 1; min-height: 30px; }
-  .history-panel { padding: 2px; }
+  .mobile-panel, .connection-form-wrap { border-radius: 6px; }
+  .mobile-panel-toggle, .mobile-form-toggle { font-size: 11px; padding: 6px 8px; }
+  .mobile-panel-content.open, .mobile-form-content.open { min-height: 100px; max-height: 50vh; overflow-y: auto; }
+  .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; border-radius: 6px; }
+  .file-browser { max-height: 80px; padding: 3px; }
+  .file-list button { padding: 3px 4px; font-size: 10px; }
+  .file-list small { display: none; }
+  .editor-pane textarea { min-height: 30px; }
+  .editor-toolbar { height: 24px; font-size: 10px; padding: 0 4px; }
+  .editor-status { font-size: 9px; padding: 1px 4px; }
+  .history-panel { padding: 2px; border-radius: 6px; }
+  .history-toolbar .panel-title { font-size: 10px; }
   .history-item { padding: 3px 4px; font-size: 10px; }
   .history-item small { display: none; }
+  .history-actions button { width: 22px; height: 22px; }
   .monitor-panel { display: none; }
   .panel-title { font-size: 10px; margin-bottom: 4px; }
+  .form-label input, .form-label select { font-size: 11px; padding: 5px 6px; }
 }
