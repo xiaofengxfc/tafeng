@@ -1,5 +1,5 @@
-import { KeyRound, Pencil, Plug, PlugZap, Plus, Server, Trash2, X } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { ChevronDown, ChevronRight, KeyRound, Pencil, Plug, PlugZap, Plus, Server, Trash2, X } from "lucide-react";
+import { FormEvent, useRef, useState } from "react";
 import type { ServerProfile } from "../../shared/types";
 import type { TFunction } from "../lib/i18n";
 import { emptyProfile } from "../lib/sample";
@@ -18,6 +18,13 @@ type Props = {
 export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, onCreate, onUpdate, onDelete, t }: Props) {
   const [draft, setDraft] = useState(emptyProfile);
   const [editingProfile, setEditingProfile] = useState<ServerProfile | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  // 编辑时自动展开表单
+  const prevEditingRef = useRef(editingProfile);
+  if (editingProfile !== prevEditingRef.current) {
+    prevEditingRef.current = editingProfile;
+    if (editingProfile) setFormOpen(true);
+  }
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -56,9 +63,14 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
 
   return (
     <aside className="side-panel">
-      <div className="panel-title">
-        <Server size={18} />
-        <span>{t("connections")}</span>
+      <div className="panel-title" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <Server size={18} />
+          <span>{t("connections")}</span>
+        </span>
+        <button type="button" className="mobile-form-add-btn" onClick={() => { cancelEdit(); setFormOpen(true); }} title={t("saveVps")}>
+          <Plus size={16} />
+        </button>
       </div>
       <div className="connection-list">
         {profiles.map((profile) => (
@@ -119,16 +131,21 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
           </div>
         ))}
       </div>
-      <form className="connection-form" onSubmit={submit}>
-        <div className="panel-title compact">
+      <div className="connection-form-wrap">
+        <button className="mobile-form-toggle" type="button" onClick={() => setFormOpen(!formOpen)}>
           {editingProfile ? <Pencil size={16} /> : <Plus size={16} />}
           <span>{editingProfile ? t("editConnection") : t("saveVps")}</span>
-          {editingProfile ? (
-            <button className="inline-icon-button" type="button" title={t("cancel")} onClick={cancelEdit}>
-              <X size={15} />
-            </button>
-          ) : null}
-        </div>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "4px" }}>
+            {editingProfile ? (
+              <span className="inline-icon-button" onClick={(e) => { e.stopPropagation(); cancelEdit(); }}>
+                <X size={15} />
+              </span>
+            ) : null}
+            {formOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </div>
+        </button>
+        <div className={`mobile-form-content ${formOpen ? "open" : ""}`}>
+        <form className="connection-form" onSubmit={submit}>
         <label className="form-label">
           {t("name")}
           <input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder="例如：我的服务器" />
@@ -200,6 +217,8 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
           {editingProfile ? t("updateConnection") : t("saveConnection")}
         </button>
       </form>
+        </div>
+      </div>
     </aside>
   );
 }

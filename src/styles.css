@@ -160,14 +160,14 @@ label {
 .mobile-panel-content { display: contents; }
 
 @media (max-width: 760px) {
-  .mobile-panel {
+  .mobile-panel, .connection-form-wrap {
     display: flex;
     flex-direction: column;
     background: #1c1c1e;
     border-radius: 10px;
     overflow: hidden;
   }
-  .mobile-panel-toggle {
+  .mobile-panel-toggle, .mobile-form-toggle {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -180,21 +180,21 @@ label {
     font-weight: 600;
     cursor: pointer;
   }
-  .mobile-panel-toggle:hover { color: #ebebed; }
-  .mobile-panel-toggle span { flex: 1; text-align: left; }
-  .mobile-panel-content {
+  .mobile-panel-toggle:hover, .mobile-form-toggle:hover { color: #ebebed; }
+  .mobile-panel-toggle span, .mobile-form-toggle span { flex: 1; text-align: left; }
+  .mobile-panel-content, .mobile-form-content {
     display: none;
   }
-  .mobile-panel-content.open {
+  .mobile-panel-content.open, .mobile-form-content.open {
     display: block;
   }
-  .mobile-panel-content > * {
+  .mobile-panel-content > *, .mobile-form-content > * {
     border-radius: 0 !important;
     box-shadow: none !important;
   }
-  .light .mobile-panel { background: #ffffff; }
-  .light .mobile-panel-toggle { background: #e8e8ed; color: #8e8e93; }
-  .light .mobile-panel-toggle:hover { color: #1d1d1f; }
+  .light .mobile-panel, .light .connection-form-wrap { background: #ffffff; }
+  .light .mobile-panel-toggle, .light .mobile-form-toggle { background: #e8e8ed; color: #8e8e93; }
+  .light .mobile-panel-toggle:hover, .light .mobile-form-toggle:hover { color: #1d1d1f; }
 }
 
 /* ── App shell ─────────────────────────────────────────────── */
@@ -357,6 +357,25 @@ label {
 .inline-icon-button { margin-left: auto; }
 
 .connection-form { margin-top: 8px; }
+
+.mobile-form-add-btn { display: none; }
+
+@media (min-width: 761px) {
+  .mobile-form-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #8e8e93;
+    cursor: pointer;
+  }
+  .mobile-form-add-btn:hover { background: #2c2c2e; color: #ebebed; }
+  .light .mobile-form-add-btn:hover { background: #e8e8ed; color: #1d1d1f; }
+}
 
 .split-inputs {
   display: grid;
@@ -1019,12 +1038,18 @@ label {
     padding: 6px;
   }
   .panel-title { font-size: 11px; margin-bottom: 6px; }
-  .connection-item { padding: 4px 6px; font-size: 12px; }
-  .connection-item small { font-size: 10px; }
-  .connection-actions button { width: 24px; height: 24px; }
+  .mobile-form-add-btn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #8e8e93; cursor: pointer; }
+  .side-panel { max-height: 140px; }
+  .connection-list { gap: 4px; }
+  .connection-item { padding: 3px 5px; font-size: 11px; gap: 4px; }
+  .connection-main { gap: 2px; }
+  .connection-item small { font-size: 9px; }
+  .connection-actions button { width: 22px; height: 22px; }
+  .connection-actions button svg { width: 12px; height: 12px; }
   .connection-form { margin-top: 4px; }
   .connection-form input { padding: 5px 8px; font-size: 12px; }
   .form-label { margin-top: 6px; font-size: 10px; }
+  .form-label input, .form-label select { font-size: 12px; padding: 6px 8px; }
   .form-row { gap: 4px; }
   .center-stack {
     display: flex;
@@ -1074,9 +1099,13 @@ label {
   .app-header strong { font-size: 12px; }
   .workspace { gap: 2px; padding: 2px; }
   .side-panel { max-height: 120px; padding: 4px; }
-  .connection-item { padding: 3px 4px; }
+  .side-panel { max-height: 110px; padding: 3px; }
+  .connection-list { gap: 3px; }
+  .connection-item { padding: 2px 4px; font-size: 10px; }
+  .connection-main { gap: 1px; }
   .connection-item small { display: none; }
-  .connection-actions button { width: 22px; height: 22px; }
+  .connection-actions button { width: 20px; height: 20px; }
+  .connection-actions button svg { width: 11px; height: 11px; }
   .center-stack {
     display: flex;
     flex-direction: column;
