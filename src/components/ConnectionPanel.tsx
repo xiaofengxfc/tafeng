@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronRight, KeyRound, Pencil, Plug, PlugZap, Plus, Server, Trash2, X } from "lucide-react";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import type { ServerProfile } from "../../shared/types";
 import type { TFunction } from "../lib/i18n";
 import { emptyProfile } from "../lib/sample";
@@ -19,12 +19,11 @@ export function ConnectionPanel({ profiles, selectedId, onSelect, onDisconnect, 
   const [draft, setDraft] = useState(emptyProfile);
   const [editingProfile, setEditingProfile] = useState<ServerProfile | null>(null);
   const [formOpen, setFormOpen] = useState(false);
-  // 编辑时自动展开表单
-  const prevEditingRef = useRef(editingProfile);
-  if (editingProfile !== prevEditingRef.current) {
-    prevEditingRef.current = editingProfile;
+
+  // 编辑连接时自动展开表单（仅在手机端有效）
+  useEffect(() => {
     if (editingProfile) setFormOpen(true);
-  }
+  }, [editingProfile]);
 
   function submit(event: FormEvent) {
     event.preventDefault();
