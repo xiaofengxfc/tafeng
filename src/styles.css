@@ -387,11 +387,10 @@ label {
 
 .center-stack {
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto minmax(80px, 1fr) minmax(120px, 200px) minmax(70px, 140px);
   gap: 8px;
   min-width: 0;
   min-height: 0;
-  height: 100%;
 }
 
 .context-line {
@@ -501,8 +500,8 @@ label {
 
 .file-editor {
   display: grid;
-  grid-template-columns: 180px 1fr;
-  min-height: 100px;
+  grid-template-columns: 180px minmax(0, 1fr);
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -548,9 +547,8 @@ label {
 
 .editor-pane {
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  display: grid;
+  grid-template-rows: 34px 1fr;
 }
 
 .editor-pane textarea {
@@ -558,10 +556,6 @@ label {
   min-height: 40px;
   padding-bottom: 24px;
   resize: vertical;
-}
-
-.editor-pane .editor-status {
-  flex-shrink: 0;
 }
 
 .editor-toolbar {
@@ -1078,7 +1072,8 @@ label {
   .file-browser { padding: 4px; border-right: 0; border-bottom: 1px solid #38383a; max-height: 120px; overflow-y: auto; }
   .file-list { overflow-y: visible; }
   .file-list button { padding: 4px 6px; font-size: 11px; }
-  .editor-pane { grid-template-rows: 28px 1fr; }
+  .editor-pane { display: flex; flex-direction: column; }
+  .editor-pane textarea { flex: 1; min-height: 40px; }
   .editor-toolbar { height: 28px; padding: 0 6px; font-size: 11px; }
   .editor-pane textarea { font-size: 11px; }
   .editor-status { font-size: 10px; padding: 2px 6px; }
@@ -1122,7 +1117,8 @@ label {
   .file-editor { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .file-browser { overflow-y: auto; max-height: 100px; }
   .history-panel { overflow-y: auto; }
-  .editor-pane { grid-template-rows: 24px 1fr; }
+  .editor-pane { display: flex; flex-direction: column; }
+  .editor-pane textarea { flex: 1; min-height: 30px; }
   .history-panel { padding: 2px; }
   .history-item { padding: 3px 4px; font-size: 10px; }
   .history-item small { display: none; }
