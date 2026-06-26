@@ -153,6 +153,8 @@ label {
 
 .app-shell {
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
   background: #0a0a0b;
   color: #ebebed;
 }
@@ -187,6 +189,8 @@ label {
   gap: 8px;
   padding: 10px;
   min-height: calc(100vh - 50px);
+  max-width: 100vw;
+  overflow: hidden;
 }
 
 .side-panel, .monitor-panel, .terminal-wrap, .file-editor {
@@ -360,6 +364,26 @@ label {
   padding: 8px;
   min-height: 100px;
   overflow: auto;
+  max-width: 100%;
+}
+
+.terminal-host .xterm {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+.terminal-host .xterm-viewport {
+  overflow-x: hidden !important;
+  max-width: 100%;
+}
+
+.terminal-host .xterm-screen {
+  max-width: 100%;
+}
+
+.terminal-host .xterm-rows {
+  max-width: 100%;
+  word-break: break-all;
 }
 
 /* ── Monitor panel ──────────────────────────────────────────── */
@@ -506,6 +530,11 @@ label {
 }
 
 .editor-pane textarea:focus { box-shadow: none; }
+
+.editor-pane textarea {
+  resize: vertical;
+  max-width: 100%;
+}
 
 .editor-status {
   padding: 3px 12px;
@@ -868,7 +897,7 @@ label {
     padding: 6px;
   }
   .center-stack {
-    grid-template-rows: auto minmax(80px, 45vh) minmax(120px, 200px) minmax(50px, 100px);
+    grid-template-rows: auto minmax(100px, 50vh) minmax(100px, 180px) minmax(40px, 80px);
     gap: 6px;
   }
   .file-browser {
@@ -899,7 +928,7 @@ label {
     max-height: 200px;
   }
   .center-stack {
-    grid-template-rows: auto minmax(60px, 35vh) minmax(80px, 140px) minmax(40px, 70px);
+    grid-template-rows: auto minmax(80px, 40vh) minmax(60px, 120px) minmax(30px, 60px);
     gap: 4px;
   }
   .context-line {
@@ -914,6 +943,9 @@ label {
   .terminal-wrap, .file-editor, .history-panel, .monitor-panel {
     border-radius: 10px;
   }
+  .terminal-host { padding: 4px; }
+  .terminal-host .xterm { font-size: 12px !important; }
+  .terminal-host .xterm-rows { font-size: 12px; }
   .file-editor .file-browser { padding: 6px; }
   .history-panel { padding: 6px; }
   .monitor-panel { padding: 8px; }
