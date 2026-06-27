@@ -52,7 +52,7 @@ export function FileEditor({ socket, t }: Props) {
     }
   }, [content]);
 
-  // Handle mobile keyboard: scroll editor into view when keyboard opens
+  // Handle mobile keyboard: calculate exact scroll position to keep editor visible
   const keyboardTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -61,25 +61,61 @@ export function FileEditor({ socket, t }: Props) {
 
     let lastHeight = vv.height;
 
+    const scrollEditorToTop = () => {
+      if (!editorRef.current) return;
+      // 找到可滚动的父容器 (.workspace)
+      const el = editorRef.current;
+      const workspace = el.closest(".workspace") as HTMLElement | null;
+      // 计算编辑器在整个文档中的位置
+      const editorTop = el.getBoundingClientRect().top + window.scrollY;
+      // 需要滚动到的目标位置 = 编辑器顶部位置 - 一个合理的偏移（留出工具栏空间）
+      const targetY = Math.max(0, editorTop - 60);
+      if (workspace) {
+        workspace.scrollTo({ top: workspace.scrollTop + (editorTop - 60 - workspace.getBoundingClientRect().top - workspace.scrollTop), behavior: "smooth" });
+      }
+      // 同时也滚动 window 确保万无一失
+      window.scrollTo({ top: targetY, behavior: "smooth" });
+    };
+
     const onResize = () => {
       const diff = lastHeight - vv.height;
-      if (diff > 100 && editorRef.current) {
-        // 键盘打开：延迟等待键盘动画完成，然后将编辑器滚动到视口顶部
+      if (diff > 100) {
+        // 键盘打开：延迟等待键盘动画完成，然后强制滚动到正确位置
         if (keyboardTimerRef.current) clearTimeout(keyboardTimerRef.current);
-        keyboardTimerRef.current = setTimeout(() => {
-          if (!editorRef.current) return;
-          // 滚动编辑器到视口顶部，确保不被键盘遮挡
-          editorRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-          // 额外向上补偿工具栏高度
-          window.scrollBy(0, -40);
-        }, 400);
+        keyboardTimerRef.current = setTimeout(scrollEditorToTop, 500);
+        // 再额外执行一次，确保覆盖
+        setTimeout(scrollEditorToTop, 800);
       }
       lastHeight = vv.height;
     };
 
     vv.addEventListener("resize", onResize);
+
+    // 编辑器获得焦点时也触发一次滚动
+    const onFocus = () => setTimeout(scrollEditorToTop, 350);
+
+    // 使用 MutationObserver 等待 editor 挂载后再绑定 focus 事件
+    const observer = new MutationObserver(() => {
+      if (editorRef.current && !editorRef.current.hasAttribute("data-keyboard")) {
+        editorRef.current.setAttribute("data-keyboard", "true");
+        editorRef.current.addEventListener("focus", onFocus);
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // 立即尝试绑定（如果已经挂载）
+    if (editorRef.current && !editorRef.current.hasAttribute("data-keyboard")) {
+      editorRef.current.setAttribute("data-keyboard", "true");
+      editorRef.current.addEventListener("focus", onFocus);
+    }
+
     return () => {
       vv.removeEventListener("resize", onResize);
+      observer.disconnect();
+      if (editorRef.current) {
+        editorRef.current.removeEventListener("focus", onFocus);
+        editorRef.current.removeAttribute("data-keyboard");
+      }
       if (keyboardTimerRef.current) clearTimeout(keyboardTimerRef.current);
     };
   }, []);
