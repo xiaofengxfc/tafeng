@@ -52,6 +52,34 @@ export function FileEditor({ socket, t }: Props) {
     }
   }, [content]);
 
+  // Handle mobile keyboard: ensure editor stays visible when keyboard opens
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const lastViewportHeight = useRef(window.innerHeight);
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const onResize = () => {
+      const diff = lastViewportHeight.current - vv.height;
+      const isKeyboardOpen = diff > 100; // 键盘打开时 viewport 缩小超过 100px
+      setKeyboardVisible(isKeyboardOpen);
+
+      if (isKeyboardOpen && editorRef.current) {
+        // 给浏览器一点时间完成键盘动画，然后滚动编辑器到可视区域
+        setTimeout(() => {
+          editorRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          // 额外向上滚动一点，避免被工具栏遮挡
+          window.scrollBy(0, -20);
+        }, 300);
+      }
+      lastViewportHeight.current = vv.height;
+    };
+
+    vv.addEventListener("resize", onResize);
+    return () => vv.removeEventListener("resize", onResize);
+  }, []);
+
   // Listen for WebSocket messages
   useEffect(() => {
     if (!socket) return;
@@ -256,7 +284,7 @@ export function FileEditor({ socket, t }: Props) {
         </div>
         <div
           ref={editorRef}
-          className="editor-content"
+          className={`editor-content${keyboardVisible ? " keyboard-open" : ""}`}
           contentEditable
           suppressContentEditableWarning
           onInput={(e) => {

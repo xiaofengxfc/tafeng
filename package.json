@@ -18,7 +18,8 @@
     "test:terminal": "node tests/terminal-viewport.mjs",
     "test:dropdown": "node tests/dropdown.mjs",
     "test:multi-panel": "node tests/multi-panel.mjs",
-    "test": "node tests/css-validate.mjs && node tests/component-check.mjs && node tests/interaction.mjs && node tests/terminal-viewport.mjs && node tests/dropdown.mjs && node tests/multi-panel.mjs"
+    "test:keyboard": "node tests/keyboard.mjs",
+    "test": "node tests/css-validate.mjs && node tests/component-check.mjs && node tests/interaction.mjs && node tests/terminal-viewport.mjs && node tests/dropdown.mjs && node tests/multi-panel.mjs && node tests/keyboard.mjs"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.6",
