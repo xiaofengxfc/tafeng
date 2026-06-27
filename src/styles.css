@@ -385,11 +385,6 @@ label { display: grid; gap: 8px; margin: 14px 0; color: #ebebed; }
 .editor-toolbar button:hover, .icon-toggle:hover { background: #2c2c2e; }
 .icon-toggle.active { border-color: #007aff; color: #007aff; }
 
-.editor-content.keyboard-open {
-  min-height: 200px;
-  padding-bottom: 120px;
-}
-
 .editor-content {
   flex: 1;
   min-height: 40px;

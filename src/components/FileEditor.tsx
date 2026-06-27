@@ -52,32 +52,36 @@ export function FileEditor({ socket, t }: Props) {
     }
   }, [content]);
 
-  // Handle mobile keyboard: ensure editor stays visible when keyboard opens
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const lastViewportHeight = useRef(window.innerHeight);
+  // Handle mobile keyboard: scroll editor into view when keyboard opens
+  const keyboardTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
 
-    const onResize = () => {
-      const diff = lastViewportHeight.current - vv.height;
-      const isKeyboardOpen = diff > 100; // 键盘打开时 viewport 缩小超过 100px
-      setKeyboardVisible(isKeyboardOpen);
+    let lastHeight = vv.height;
 
-      if (isKeyboardOpen && editorRef.current) {
-        // 给浏览器一点时间完成键盘动画，然后滚动编辑器到可视区域
-        setTimeout(() => {
-          editorRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-          // 额外向上滚动一点，避免被工具栏遮挡
-          window.scrollBy(0, -20);
-        }, 300);
+    const onResize = () => {
+      const diff = lastHeight - vv.height;
+      if (diff > 100 && editorRef.current) {
+        // 键盘打开：延迟等待键盘动画完成，然后将编辑器滚动到视口顶部
+        if (keyboardTimerRef.current) clearTimeout(keyboardTimerRef.current);
+        keyboardTimerRef.current = setTimeout(() => {
+          if (!editorRef.current) return;
+          // 滚动编辑器到视口顶部，确保不被键盘遮挡
+          editorRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+          // 额外向上补偿工具栏高度
+          window.scrollBy(0, -40);
+        }, 400);
       }
-      lastViewportHeight.current = vv.height;
+      lastHeight = vv.height;
     };
 
     vv.addEventListener("resize", onResize);
-    return () => vv.removeEventListener("resize", onResize);
+    return () => {
+      vv.removeEventListener("resize", onResize);
+      if (keyboardTimerRef.current) clearTimeout(keyboardTimerRef.current);
+    };
   }, []);
 
   // Listen for WebSocket messages
@@ -284,7 +288,7 @@ export function FileEditor({ socket, t }: Props) {
         </div>
         <div
           ref={editorRef}
-          className={`editor-content${keyboardVisible ? " keyboard-open" : ""}`}
+          className="editor-content"
           contentEditable
           suppressContentEditableWarning
           onInput={(e) => {
