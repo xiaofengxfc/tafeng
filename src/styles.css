@@ -287,6 +287,7 @@ label { display: grid; gap: 8px; margin: 14px 0; color: #ebebed; }
   display: grid;
   grid-template-rows: 26px 1fr;
   min-height: 0;
+  flex: 1;
 }
 
 .terminal-toolbar {
@@ -314,6 +315,10 @@ label { display: grid; gap: 8px; margin: 14px 0; color: #ebebed; }
 .terminal-host .xterm-viewport { overflow-x: hidden !important; max-width: 100%; }
 .terminal-host .xterm-screen { max-width: 100%; }
 .terminal-host .xterm-rows { max-width: 100%; word-break: break-all; }
+
+/* ── Center stack (mobile: flex) ───────────────────────────── */
+
+.center-stack { display: flex; flex-direction: column; gap: 4px; flex: 1; min-height: 0; }
 
 /* ── File editor (mobile) ──────────────────────────────────── */
 

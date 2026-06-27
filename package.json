@@ -15,7 +15,8 @@
     "test:smoke": "node tests/smoke.mjs",
     "test:components": "node tests/component-check.mjs",
     "test:interaction": "node tests/interaction.mjs",
-    "test": "node tests/css-validate.mjs && node tests/component-check.mjs && node tests/interaction.mjs"
+    "test:terminal": "node tests/terminal-viewport.mjs",
+    "test": "node tests/css-validate.mjs && node tests/component-check.mjs && node tests/interaction.mjs && node tests/terminal-viewport.mjs"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.6",
